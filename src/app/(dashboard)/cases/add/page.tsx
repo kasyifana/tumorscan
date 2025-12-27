@@ -50,28 +50,28 @@ export default function AddCasePage() {
     };
 
     return (
-        <div className="max-w-3xl">
+        <div className="max-w-3xl mx-auto px-0 sm:px-4">
             {/* Back Button */}
             <Link
                 href="/cases"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 text-sm"
             >
                 <MdArrowBack className="w-5 h-5" />
                 Back to Cases
             </Link>
 
             {/* Page Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Add Case MRI Tumor</h1>
-                <p className="text-gray-500">Create a new MRI case for analysis</p>
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Add Case MRI Tumor</h1>
+                <p className="text-sm text-gray-500">Create a new MRI case for analysis</p>
             </div>
 
             {/* Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 space-y-4 sm:space-y-6">
                     {/* Patient Search */}
                     <div className="relative">
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                             Search Patient
                         </label>
                         <div className="relative">
@@ -85,7 +85,7 @@ export default function AddCasePage() {
                                     setShowDropdown(true);
                                 }}
                                 onFocus={() => setShowDropdown(true)}
-                                className="input-field pl-10"
+                                className="input-field pl-10 text-sm"
                             />
                         </div>
                         {showDropdown && searchTerm && (
@@ -98,8 +98,8 @@ export default function AddCasePage() {
                                             onClick={() => handlePatientSelect(patient)}
                                             className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 last:border-0"
                                         >
-                                            <p className="font-medium text-gray-900">{patient.name}</p>
-                                            <p className="text-sm text-gray-500">{patient.id}</p>
+                                            <p className="font-medium text-gray-900 text-sm">{patient.name}</p>
+                                            <p className="text-xs text-gray-500">{patient.id}</p>
                                         </button>
                                     ))
                                 ) : (
@@ -109,41 +109,42 @@ export default function AddCasePage() {
                         )}
                     </div>
 
-                    {/* Patient ID */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            Patient ID
-                        </label>
-                        <input
-                            type="text"
-                            name="patientId"
-                            value={formData.patientId}
-                            onChange={handleChange}
-                            placeholder="Auto-filled from search"
-                            className="input-field bg-gray-50"
-                            readOnly
-                        />
-                    </div>
+                    {/* Patient ID & MRN Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Patient ID
+                            </label>
+                            <input
+                                type="text"
+                                name="patientId"
+                                value={formData.patientId}
+                                onChange={handleChange}
+                                placeholder="Auto-filled from search"
+                                className="input-field bg-gray-50 text-sm"
+                                readOnly
+                            />
+                        </div>
 
-                    {/* Medical Record Number */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            Medical Record Number
-                        </label>
-                        <input
-                            type="text"
-                            name="medicalRecordNumber"
-                            value={formData.medicalRecordNumber}
-                            onChange={handleChange}
-                            placeholder="Auto-filled from search"
-                            className="input-field bg-gray-50"
-                            readOnly
-                        />
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Medical Record Number
+                            </label>
+                            <input
+                                type="text"
+                                name="medicalRecordNumber"
+                                value={formData.medicalRecordNumber}
+                                onChange={handleChange}
+                                placeholder="Auto-filled from search"
+                                className="input-field bg-gray-50 text-sm"
+                                readOnly
+                            />
+                        </div>
                     </div>
 
                     {/* Case ID */}
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                             Case ID
                         </label>
                         <input
@@ -152,36 +153,37 @@ export default function AddCasePage() {
                             value={formData.caseId}
                             onChange={handleChange}
                             placeholder="e.g., CS-2024-039"
-                            className="input-field"
+                            className="input-field text-sm"
                         />
                     </div>
 
-                    {/* MRI Date */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            MRI Date
-                        </label>
-                        <input
-                            type="date"
-                            name="mriDate"
-                            value={formData.mriDate}
-                            onChange={handleChange}
-                            className="input-field"
-                        />
-                    </div>
+                    {/* Date Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                MRI Date
+                            </label>
+                            <input
+                                type="date"
+                                name="mriDate"
+                                value={formData.mriDate}
+                                onChange={handleChange}
+                                className="input-field text-sm"
+                            />
+                        </div>
 
-                    {/* Study Date */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">
-                            Study Date
-                        </label>
-                        <input
-                            type="date"
-                            name="studyDate"
-                            value={formData.studyDate}
-                            onChange={handleChange}
-                            className="input-field"
-                        />
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Study Date
+                            </label>
+                            <input
+                                type="date"
+                                name="studyDate"
+                                value={formData.studyDate}
+                                onChange={handleChange}
+                                className="input-field text-sm"
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -189,7 +191,7 @@ export default function AddCasePage() {
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="bg-primary text-dark font-semibold px-8 py-3 rounded-lg hover:bg-primary-dark transition-colors"
+                        className="w-full sm:w-auto bg-primary text-dark font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg hover:bg-primary-dark transition-colors text-sm sm:text-base"
                     >
                         Add Case
                     </button>

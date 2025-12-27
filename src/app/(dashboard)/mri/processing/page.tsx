@@ -36,51 +36,51 @@ export default function ProcessingPage() {
     const isComplete = currentStep >= steps.length;
 
     return (
-        <div className="max-w-3xl mx-auto">
+        <div className="max-w-3xl mx-auto px-0 sm:px-4">
             {/* Page Header */}
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">AI Processing Status</h1>
-                <p className="text-gray-500">
-                    Track the progress of MRI Analysis pipeline for analysis workflow
+            <div className="mb-6 sm:mb-8">
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">AI Processing Status</h1>
+                <p className="text-sm text-gray-500">
+                    Track the progress of MRI Analysis pipeline
                 </p>
             </div>
 
             {/* Processing Steps */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 space-y-3 sm:space-y-4">
                 {steps.map((step, index) => (
                     <div
                         key={step.id}
-                        className={`border rounded-lg p-4 transition-all ${step.status === 'completed'
-                                ? 'border-green-200 bg-green-50'
-                                : index === currentStep
-                                    ? 'border-primary bg-primary/5'
-                                    : 'border-gray-100 bg-gray-50'
+                        className={`border rounded-lg p-3 sm:p-4 transition-all ${step.status === 'completed'
+                            ? 'border-green-200 bg-green-50'
+                            : index === currentStep
+                                ? 'border-primary bg-primary/5'
+                                : 'border-gray-100 bg-gray-50'
                             }`}
                     >
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-3">
+                        <div className="flex items-start sm:items-center justify-between gap-3">
+                            <div className="flex items-start sm:items-center gap-3 flex-1 min-w-0">
                                 {step.status === 'completed' ? (
-                                    <MdCheckCircle className="w-6 h-6 text-green-500" />
+                                    <MdCheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0 mt-0.5 sm:mt-0" />
                                 ) : index === currentStep ? (
-                                    <div className="w-6 h-6 rounded-full border-2 border-primary border-t-transparent animate-spin" />
+                                    <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-primary border-t-transparent animate-spin flex-shrink-0 mt-0.5 sm:mt-0" />
                                 ) : (
-                                    <MdHourglassEmpty className="w-6 h-6 text-gray-300" />
+                                    <MdHourglassEmpty className="w-5 h-5 sm:w-6 sm:h-6 text-gray-300 flex-shrink-0 mt-0.5 sm:mt-0" />
                                 )}
-                                <div>
-                                    <h3 className="font-semibold text-gray-900">{step.name}</h3>
-                                    <p className="text-sm text-gray-500">{step.description}</p>
+                                <div className="min-w-0">
+                                    <h3 className="font-semibold text-gray-900 text-sm sm:text-base">{step.name}</h3>
+                                    <p className="text-xs sm:text-sm text-gray-500 truncate">{step.description}</p>
                                 </div>
                             </div>
                             <span
-                                className={`text-sm font-medium ${step.status === 'completed'
-                                        ? 'text-green-600'
-                                        : index === currentStep
-                                            ? 'text-primary'
-                                            : 'text-gray-400'
+                                className={`text-xs sm:text-sm font-medium whitespace-nowrap ${step.status === 'completed'
+                                    ? 'text-green-600'
+                                    : index === currentStep
+                                        ? 'text-primary'
+                                        : 'text-gray-400'
                                     }`}
                             >
                                 {step.status === 'completed'
-                                    ? 'Completed'
+                                    ? 'Done'
                                     : index === currentStep
                                         ? 'Processing...'
                                         : 'Pending'}
@@ -100,13 +100,13 @@ export default function ProcessingPage() {
             </div>
 
             {/* Action Button */}
-            <div className="mt-6 flex justify-end">
+            <div className="mt-4 sm:mt-6 flex justify-end">
                 <button
                     onClick={() => router.push('/mri/results')}
                     disabled={!isComplete}
-                    className={`px-8 py-3 rounded-lg font-semibold transition-colors ${isComplete
-                            ? 'bg-primary text-dark hover:bg-primary-dark'
-                            : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                    className={`w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg font-semibold transition-colors text-sm sm:text-base ${isComplete
+                        ? 'bg-primary text-dark hover:bg-primary-dark'
+                        : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                         }`}
                 >
                     View Analysis Result

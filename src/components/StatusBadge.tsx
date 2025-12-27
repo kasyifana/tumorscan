@@ -26,7 +26,7 @@ export default function StatusBadge({ status }: StatusBadgeProps) {
     };
 
     return (
-        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium ${getStatusStyles()}`}>
+        <span className={`inline-flex px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium whitespace-nowrap ${getStatusStyles()}`}>
             {status}
         </span>
     );

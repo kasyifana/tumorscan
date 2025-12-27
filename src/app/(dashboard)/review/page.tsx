@@ -47,31 +47,30 @@ export default function ReviewPage() {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
             {/* Page Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-2 sm:gap-0">
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900">Approval Queue</h1>
-                    <p className="text-gray-500">
-                        Review and approve AI-generated findings for pending MRI cases. High-priority cases
-                        require the most immediate attention.
+                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Approval Queue</h1>
+                    <p className="text-xs sm:text-sm text-gray-500">
+                        Review and approve AI-generated findings for pending MRI cases.
                     </p>
                 </div>
-                <div className="flex items-center gap-4 text-sm">
+                <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm">
                     <span className="text-gray-600">
-                        Displaying All • <span className="font-medium">{pendingCount} pending</span>
+                        <span className="font-medium">{pendingCount} pending</span>
                     </span>
                 </div>
             </div>
 
             {/* Stats Summary */}
-            <div className="flex items-center gap-6 text-sm">
+            <div className="flex flex-wrap items-center gap-4 sm:gap-6 text-xs sm:text-sm">
                 <div className="flex items-center gap-2">
                     <span className="text-gray-600">Reviewed:</span>
                     <span className="font-semibold">{approvedCount}/{reviewQueue.length}</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-gray-600">Pass Score (Total):</span>
+                    <span className="text-gray-600">Pass Score:</span>
                     <span className="font-semibold text-green-600">+92%</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -81,15 +80,15 @@ export default function ReviewPage() {
             </div>
 
             {/* Filters */}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4">
                 <div className="flex items-center gap-2">
                     <MdFilterList className="w-5 h-5 text-gray-500" />
-                    <span className="text-sm text-gray-600">Filter by:</span>
+                    <span className="text-xs sm:text-sm text-gray-600">Filter:</span>
                 </div>
                 <select
                     value={priorityFilter}
                     onChange={(e) => setPriorityFilter(e.target.value)}
-                    className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                     <option value="all">Priority: All</option>
                     <option value="Urgent">Urgent</option>
@@ -100,7 +99,7 @@ export default function ReviewPage() {
                 <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="px-2 sm:px-3 py-1.5 sm:py-2 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-primary"
                 >
                     <option value="all">Status: All</option>
                     <option value="Pending">Pending</option>
@@ -113,31 +112,31 @@ export default function ReviewPage() {
             {/* Review Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">
-                    <table className="w-full">
+                    <table className="w-full min-w-[900px]">
                         <thead className="bg-gray-50">
                             <tr>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Expand AI
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    AI
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Case ID
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    Submission Date
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                    Date
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Patient
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Priority
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Status
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Confidence
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                <th className="px-4 sm:px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
                             </tr>
@@ -146,7 +145,7 @@ export default function ReviewPage() {
                             {filteredItems.map((item) => (
                                 <>
                                     <tr key={item.caseId} className="hover:bg-gray-50 transition-colors">
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
                                             <button
                                                 onClick={() => setExpandedRow(expandedRow === item.caseId ? null : item.caseId)}
                                                 className="p-1 hover:bg-gray-100 rounded"
@@ -158,25 +157,25 @@ export default function ReviewPage() {
                                                 )}
                                             </button>
                                         </td>
-                                        <td className="px-6 py-4 text-sm font-medium text-gray-900">
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium text-gray-900">
                                             {item.caseId}
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-500">{item.submissionDate}</td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{item.patientName}</td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-500">{item.submissionDate}</td>
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700">{item.patientName}</td>
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
                                             <span className={`px-2 py-1 text-xs font-medium rounded ${getPriorityColor(item.priority)}`}>
                                                 {item.priority}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
                                             <span className={`px-2 py-1 text-xs font-medium rounded ${getStatusColor(item.status)}`}>
                                                 {item.status}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-sm text-gray-700">{item.confidence}%</td>
-                                        <td className="px-6 py-4">
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-gray-700">{item.confidence}%</td>
+                                        <td className="px-4 sm:px-6 py-3 sm:py-4">
                                             {item.status === 'Pending' || item.status === 'In Review' ? (
-                                                <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-1 sm:gap-2">
                                                     <button
                                                         onClick={() => handleApprove(item.caseId)}
                                                         className="p-1.5 text-green-600 hover:bg-green-50 rounded"
@@ -193,7 +192,7 @@ export default function ReviewPage() {
                                                     </button>
                                                 </div>
                                             ) : (
-                                                <span className="text-sm text-gray-400">
+                                                <span className="text-xs sm:text-sm text-gray-400">
                                                     {item.status === 'Approved' ? '✓ Approved' : '✕ Rejected'}
                                                 </span>
                                             )}
@@ -202,14 +201,14 @@ export default function ReviewPage() {
                                     {/* Expanded Details Row */}
                                     {expandedRow === item.caseId && (
                                         <tr className="bg-gray-50">
-                                            <td colSpan={8} className="px-6 py-4">
-                                                <div className="pl-12 space-y-2">
-                                                    <p className="text-sm">
+                                            <td colSpan={8} className="px-4 sm:px-6 py-3 sm:py-4">
+                                                <div className="pl-8 sm:pl-12 space-y-2">
+                                                    <p className="text-xs sm:text-sm">
                                                         <span className="font-medium text-gray-700">Notes:</span>{' '}
                                                         <span className="text-gray-600">{item.notes}</span>
                                                     </p>
                                                     {item.reviewer && (
-                                                        <p className="text-sm">
+                                                        <p className="text-xs sm:text-sm">
                                                             <span className="font-medium text-gray-700">Reviewer:</span>{' '}
                                                             <span className="text-gray-600">{item.reviewer}</span>
                                                         </p>
@@ -226,7 +225,7 @@ export default function ReviewPage() {
             </div>
 
             {/* Disclaimer */}
-            <div className="text-center text-sm text-gray-500 py-4">
+            <div className="text-center text-xs sm:text-sm text-gray-500 py-2 sm:py-4">
                 Draft in Review/Draft
             </div>
         </div>
