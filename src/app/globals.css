@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #E5C100;
+  --primary-dark: #C9A900;
+  --primary-light: #F5E066;
+  --dark: #1a1a1a;
+  --dark-lighter: #2a2a2a;
+  --light-bg: #FAFAFA;
+  --white: #FFFFFF;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6b7280;
+  --success: #22c55e;
+  --warning: #eab308;
+  --info: #3b82f6;
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: var(--light-bg);
+  color: var(--text-primary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Button base styles */
+.btn-primary {
+  @apply bg-primary text-dark font-semibold px-6 py-2.5 rounded-lg transition-all duration-200 hover:bg-primary-dark;
+}
+
+.btn-secondary {
+  @apply bg-white border border-gray-300 text-dark font-medium px-6 py-2.5 rounded-lg transition-all duration-200 hover:bg-gray-50;
+}
+
+/* Card styles */
+.card {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100;
+}
+
+/* Input styles */
+.input-field {
+  @apply w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all duration-200;
+}
+
+/* Status badge styles */
+.badge {
+  @apply px-3 py-1 rounded-full text-xs font-medium;
+}
+
+.badge-pending {
+  @apply bg-blue-100 text-blue-700;
+}
+
+.badge-processing {
+  @apply bg-yellow-100 text-yellow-700;
+}
+
+.badge-completed {
+  @apply bg-green-100 text-green-700;
+}
+
+.badge-failed {
+  @apply bg-red-100 text-red-700;
+}
+
+/* Table styles */
+.table-header {
+  @apply text-left text-xs font-semibold text-gray-500 uppercase tracking-wider;
+}
+
+.table-cell {
+  @apply py-4 px-4 text-sm text-gray-700;
+}
+
+/* Sidebar active state */
+.sidebar-link {
+  @apply flex items-center gap-3 px-4 py-3 text-gray-400 rounded-lg transition-all duration-200 hover:bg-dark-lighter hover:text-white;
+}
+
+.sidebar-link.active {
+  @apply bg-primary text-dark font-medium;
+}
