@@ -4,32 +4,74 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { MdArrowBack } from 'react-icons/md';
+import { createPatient } from '@/lib/supabase';
 
 export default function AddPatientPage() {
     const router = useRouter();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
     const [formData, setFormData] = useState({
         patientId: '',
         medicalRecordNumber: '',
-        fullName: '',
+        name: '',
         dateOfBirth: '',
+        age: '',
         gender: '',
+        phone: '',
+        email: '',
         address: '',
         weight: '',
         height: '',
+        diagnosis: '',
         clinicalSymptoms: '',
-        priorMedicalHistory: '',
+        medicalHistory: '',
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Auto-calculate age from DOB
+        if (name === 'dateOfBirth' && value) {
+            const dob = new Date(value);
+            const today = new Date();
+            const age = today.getFullYear() - dob.getFullYear();
+            setFormData((prev) => ({ ...prev, age: age.toString() }));
+        }
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Mock save - just redirect
-        alert('Patient saved successfully (mock)');
-        router.push('/patients');
+        setLoading(true);
+        setError(null);
+
+        try {
+            await createPatient({
+                patient_id: formData.patientId,
+                medical_record_number: formData.medicalRecordNumber,
+                name: formData.name,
+                date_of_birth: formData.dateOfBirth,
+                age: parseInt(formData.age) || 0,
+                gender: formData.gender as 'Male' | 'Female',
+                phone: formData.phone,
+                email: formData.email,
+                address: formData.address,
+                weight: formData.weight ? parseFloat(formData.weight) : undefined,
+                height: formData.height ? parseFloat(formData.height) : undefined,
+                diagnosis: formData.diagnosis,
+                status: 'Active',
+                clinical_symptoms: formData.clinicalSymptoms,
+                medical_history: formData.medicalHistory,
+            });
+
+            router.push('/patients');
+        } catch (err) {
+            console.error('Error creating patient:', err);
+            setError('Failed to create patient. Please check if Patient ID is unique.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -45,63 +87,75 @@ export default function AddPatientPage() {
 
             {/* Page Header */}
             <div className="mb-6 sm:mb-8">
-                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Add New Patient</h1>
-                <p className="text-sm text-gray-500">Register a new patient in the system</p>
+                <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Add Patient Data</h1>
+                <p className="text-sm text-gray-500">Enter patient information for a new record</p>
             </div>
+
+            {/* Error Message */}
+            {error && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <p className="text-sm text-red-700">{error}</p>
+                </div>
+            )}
 
             {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                 <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 space-y-4 sm:space-y-6">
-                    {/* Patient ID */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                            Patient ID
-                        </label>
-                        <input
-                            type="text"
-                            name="patientId"
-                            value={formData.patientId}
-                            onChange={handleChange}
-                            placeholder="e.g., PT-022"
-                            className="input-field text-sm"
-                        />
-                    </div>
+                    <h2 className="font-semibold text-gray-900 text-sm sm:text-base">Patient Information</h2>
 
-                    {/* Medical Record Number */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                            Medical Record Number
-                        </label>
-                        <input
-                            type="text"
-                            name="medicalRecordNumber"
-                            value={formData.medicalRecordNumber}
-                            onChange={handleChange}
-                            placeholder="e.g., MRN-2024-022"
-                            className="input-field text-sm"
-                        />
-                    </div>
-
-                    {/* Full Name */}
-                    <div>
-                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                            Patient Name
-                        </label>
-                        <input
-                            type="text"
-                            name="fullName"
-                            value={formData.fullName}
-                            onChange={handleChange}
-                            placeholder="Enter full name"
-                            className="input-field text-sm"
-                        />
-                    </div>
-
-                    {/* Date of Birth & Gender Row */}
+                    {/* ID Row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                                Date of Birth
+                                Patient ID *
+                            </label>
+                            <input
+                                type="text"
+                                name="patientId"
+                                value={formData.patientId}
+                                onChange={handleChange}
+                                placeholder="e.g., PT-004"
+                                className="input-field text-sm"
+                                required
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Medical Record Number
+                            </label>
+                            <input
+                                type="text"
+                                name="medicalRecordNumber"
+                                value={formData.medicalRecordNumber}
+                                onChange={handleChange}
+                                placeholder="Auto-generated or custom"
+                                className="input-field text-sm"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Name */}
+                    <div>
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                            Full Name *
+                        </label>
+                        <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Enter patient full name"
+                            className="input-field text-sm"
+                            required
+                        />
+                    </div>
+
+                    {/* DOB, Age, Gender Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Date of Birth *
                             </label>
                             <input
                                 type="date"
@@ -109,23 +163,71 @@ export default function AddPatientPage() {
                                 value={formData.dateOfBirth}
                                 onChange={handleChange}
                                 className="input-field text-sm"
+                                required
                             />
                         </div>
 
                         <div>
                             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                                Gender
+                                Age
+                            </label>
+                            <input
+                                type="number"
+                                name="age"
+                                value={formData.age}
+                                onChange={handleChange}
+                                placeholder="Auto"
+                                className="input-field bg-gray-50 text-sm"
+                                readOnly
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Gender *
                             </label>
                             <select
                                 name="gender"
                                 value={formData.gender}
                                 onChange={handleChange}
                                 className="input-field text-sm"
+                                required
                             >
-                                <option value="">Select gender</option>
+                                <option value="">Select Gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
+                        </div>
+                    </div>
+
+                    {/* Contact Row */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Phone Number
+                            </label>
+                            <input
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                                placeholder="+62 xxx-xxxx-xxxx"
+                                className="input-field text-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                                Email Address
+                            </label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="patient@email.com"
+                                className="input-field text-sm"
+                            />
                         </div>
                     </div>
 
@@ -134,29 +236,30 @@ export default function AddPatientPage() {
                         <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                             Address
                         </label>
-                        <input
-                            type="text"
+                        <textarea
                             name="address"
                             value={formData.address}
                             onChange={handleChange}
-                            placeholder="Enter address"
-                            className="input-field text-sm"
+                            rows={2}
+                            placeholder="Enter patient address"
+                            className="input-field text-sm resize-none"
                         />
                     </div>
 
-                    {/* Weight & Height Row */}
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* Weight & Height */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                                 Weight (kg)
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 name="weight"
                                 value={formData.weight}
                                 onChange={handleChange}
                                 placeholder="e.g., 70"
                                 className="input-field text-sm"
+                                step="0.1"
                             />
                         </div>
 
@@ -165,17 +268,36 @@ export default function AddPatientPage() {
                                 Height (cm)
                             </label>
                             <input
-                                type="text"
+                                type="number"
                                 name="height"
                                 value={formData.height}
                                 onChange={handleChange}
                                 placeholder="e.g., 170"
                                 className="input-field text-sm"
+                                step="0.1"
                             />
                         </div>
                     </div>
+                </div>
 
-                    {/* Clinical Symptoms */}
+                {/* Medical Information */}
+                <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6 space-y-4 sm:space-y-6">
+                    <h2 className="font-semibold text-gray-900 text-sm sm:text-base">Medical Information</h2>
+
+                    <div>
+                        <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                            Current Diagnosis
+                        </label>
+                        <input
+                            type="text"
+                            name="diagnosis"
+                            value={formData.diagnosis}
+                            onChange={handleChange}
+                            placeholder="e.g., Pending, Glioma, No Tumor"
+                            className="input-field text-sm"
+                        />
+                    </div>
+
                     <div>
                         <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
                             Clinical Symptoms
@@ -184,24 +306,23 @@ export default function AddPatientPage() {
                             name="clinicalSymptoms"
                             value={formData.clinicalSymptoms}
                             onChange={handleChange}
-                            placeholder="Describe symptoms..."
                             rows={3}
-                            className="input-field resize-none text-sm"
+                            placeholder="Describe patient symptoms..."
+                            className="input-field text-sm resize-none"
                         />
                     </div>
 
-                    {/* Prior Medical History */}
                     <div>
                         <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
-                            Prior Medical History
+                            Medical History
                         </label>
                         <textarea
-                            name="priorMedicalHistory"
-                            value={formData.priorMedicalHistory}
+                            name="medicalHistory"
+                            value={formData.medicalHistory}
                             onChange={handleChange}
-                            placeholder="Prior conditions & relevant history..."
                             rows={3}
-                            className="input-field resize-none text-sm"
+                            placeholder="Previous medical conditions, surgeries, allergies..."
+                            className="input-field text-sm resize-none"
                         />
                     </div>
                 </div>
@@ -210,9 +331,13 @@ export default function AddPatientPage() {
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="w-full sm:w-auto bg-primary text-dark font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg hover:bg-primary-dark transition-colors text-sm sm:text-base"
+                        disabled={loading}
+                        className={`w-full sm:w-auto font-semibold px-6 sm:px-8 py-2.5 sm:py-3 rounded-lg transition-colors text-sm sm:text-base ${loading
+                                ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                                : 'bg-primary text-dark hover:bg-primary-dark'
+                            }`}
                     >
-                        Save Patient
+                        {loading ? 'Saving...' : 'Save Patient'}
                     </button>
                 </div>
             </form>
