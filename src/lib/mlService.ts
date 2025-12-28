@@ -98,8 +98,9 @@ export async function analyzeMRIImage(imageFile: File | Blob): Promise<MLPredict
         console.log("Raw API result:", result);
         console.log("Result data:", result.data);
 
-        // Get the first element of the data array
-        const rawPrediction = result.data?.[0];
+        // Get the first element of the data array (cast to array type)
+        const dataArray = result.data as unknown[];
+        const rawPrediction = dataArray?.[0];
         console.log("Raw prediction value:", rawPrediction, "Type:", typeof rawPrediction);
 
         return mapPrediction(rawPrediction);
